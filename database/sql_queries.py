@@ -35,3 +35,7 @@ select * from ban_users where telegram_id = ?
 UPDATE_BAN_USER = """
 update ban_users set ban_count = ban_count + 1 where telegram_id = ?
 """
+
+DELETE_BAN_USER = """
+delete from ban_users where telegram_id = ?
+"""

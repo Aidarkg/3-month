@@ -46,3 +46,10 @@ class Database:
             (tg_id,)
         )
         self.connection.commit()
+
+    def sql_delete_user(self, tg_id):
+        self.cursor.execute(
+            sql_queries.DELETE_BAN_USER,
+            (tg_id,)
+        )
+        self.connection.commit()

@@ -20,7 +20,7 @@ async def chat_messages(message: types.Message):
                 db.sql_insert_ban_user(
                     tg_id=message.from_user.id
                 )
-            elif int(user['count']) > 3:
+            elif int(user['count']) >= 3:
                 if user['telegram_id'] == int(ADMIN_ID):
                     pass
                 else:
@@ -32,6 +32,9 @@ async def chat_messages(message: types.Message):
                         chat_id=message.chat.id,
                         user_id=message.from_user.id,
                         until_date=datetime.now() + timedelta(seconds=100)
+                    )
+                    db.sql_delete_user(
+                        tg_id=message.from_user.id
                     )
             else:
                 db.sql_update_ban_user_count(
