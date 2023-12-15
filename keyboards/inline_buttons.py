@@ -1,4 +1,3 @@
-# keyboards/inline_buttons.py
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
