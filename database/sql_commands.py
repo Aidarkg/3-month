@@ -13,6 +13,7 @@ class Database:
 
         self.connection.execute(sql_queries.CREATE_USER_TABLE_QUERY)
         self.connection.execute(sql_queries.CREATE_BAN_USER_TABLE)
+        self.connection.execute(sql_queries.CREATE_PROFILE_TABLE)
         self.connection.commit()
 
     def sql_insert_user(self, tg_id, username, first_name, last_name):
@@ -53,3 +54,32 @@ class Database:
             (tg_id,)
         )
         self.connection.commit()
+
+    def sql_insert_profile_user(self, tg_id, nickname, bio, age, height, weight, gender, photo):
+        self.cursor.execute(
+            sql_queries.INSERT_PROFILE_USERS,
+            (None, tg_id, nickname, bio, age, height, weight, gender, photo)
+        )
+        self.connection.commit()
+
+    def sql_select_profile_user(self, tg_id):
+        self.cursor.execute(
+            sql_queries.SELECT_PROFILE_USER,
+            (tg_id,)
+        )
+        user_data = self.cursor.fetchone()
+
+        if user_data:
+            return {
+                "id": user_data[0],
+                "telegram_id": user_data[1],
+                "nickname": user_data[2],
+                "biography": user_data[3],
+                "age": user_data[4],
+                "height": user_data[5],
+                "weight": user_data[6],
+                "gender": user_data[7],
+                "photo": user_data[8]
+            }
+        else:
+            return None

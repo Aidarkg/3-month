@@ -11,8 +11,13 @@ async def start_menu_keyboard():
         "Ban Users 🚫",
         callback_data="ban_users"
     )
-    markup.add(questionnaire_button)
+    registration_button = InlineKeyboardButton(
+        "Registration 🐉",
+        callback_data="registration"
+    )
     markup.add(ban_button)
+    markup.add(questionnaire_button)
+    markup.add(registration_button)
     return markup
 
 

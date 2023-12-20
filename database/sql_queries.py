@@ -10,9 +10,31 @@ UNIQUE (TELEGRAM_ID)
 )
 """
 
+CREATE_PROFILE_TABLE = """
+create table if not exists profile_users
+(
+id integer primary key,
+telegram_id integer,
+nickname char(50),
+biography text,
+age integer,
+height integer,
+weight integer,
+gender char(50),
+photo text,
+unique (telegram_id)
+)
+"""
+
+
 INSERT_USER_QUERY = """
 INSERT OR IGNORE INTO telegram_users VALUES (?,?,?,?,?)
 """
+
+INSERT_PROFILE_USERS = """
+insert or ignore into profile_users values (?,?,?,?,?,?,?,?,?)
+"""
+
 
 CREATE_BAN_USER_TABLE = """
 create table if not exists ban_users
@@ -30,6 +52,10 @@ insert into ban_users values (?,?,?)
 
 SELECT_BAN_USER = """
 select * from ban_users where telegram_id = ?
+"""
+
+SELECT_PROFILE_USER = """
+select * from profile_users where telegram_id = ?
 """
 
 UPDATE_BAN_USER = """
