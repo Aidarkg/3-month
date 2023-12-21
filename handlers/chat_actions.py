@@ -1,6 +1,6 @@
 from datetime import timedelta, datetime
 from aiogram import types, Dispatcher
-from config import bot, GROUP_ID, ADMIN_ID, GROUP_ID2
+from config import bot, ADMIN_ID
 from profanity_check import predict, predict_prob
 
 from database.sql_commands import Database
@@ -8,7 +8,7 @@ from database.sql_commands import Database
 
 async def chat_messages(message: types.Message):
     db = Database()
-    if message.chat.id == int(GROUP_ID):
+    if message.chat.id == int(message.chat.id):
         ban_word_predict_prob = predict_prob([message.text])
         print(ban_word_predict_prob)
         if ban_word_predict_prob[0] > 0.5:

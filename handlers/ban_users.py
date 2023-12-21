@@ -1,20 +1,20 @@
 from aiogram import types, Dispatcher
-from config import bot, GROUP_ID
+from config import bot
 from database.sql_commands import Database
 
 
-async def ban_users_db(message: types.Message):
+async def ban_users_db(call: types.CallbackQuery):
     db = Database()
-    user = db.sql_select_ban_user(message.from_user.id)
+    user = db.sql_select_ban_user(call.from_user.id)
 
     if user:
-        text = (f"Hello {message.from_user.first_name}!\n"
+        text = (f"Hello {call.from_user.first_name}!\n"
                 f"You are in the database. Total violations: {user['count']}")
     else:
-        text = f"Hello {message.from_user.first_name}!\nYou are not in the database. Don't worry."
+        text = f"Hello {call.from_user.first_name}!\nYou are not in the database. Don't worry."
 
     await bot.send_message(
-        chat_id=GROUP_ID,
+        chat_id=call.message.chat.id,
         text=text,
     )
 

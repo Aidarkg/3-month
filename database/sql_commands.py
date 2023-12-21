@@ -14,6 +14,8 @@ class Database:
         self.connection.execute(sql_queries.CREATE_USER_TABLE_QUERY)
         self.connection.execute(sql_queries.CREATE_BAN_USER_TABLE)
         self.connection.execute(sql_queries.CREATE_PROFILE_TABLE)
+        self.connection.execute(sql_queries.CREATE_LIKE_TABLE_QUERY)
+        self.connection.execute(sql_queries.CREATE_DISLIKE_TABLE_QUERY)
         self.connection.commit()
 
     def sql_insert_user(self, tg_id, username, first_name, last_name):
@@ -83,3 +85,34 @@ class Database:
             }
         else:
             return None
+
+    def sql_select_filter_profiles(self, tg_id):
+        self.cursor.row_factory = lambda cursor, row: {
+            "id": row[0],
+            "telegram_id": row[1],
+            "nickname": row[2],
+            "biography": row[3],
+            "age": row[4],
+            "height": row[5],
+            "weight": row[6],
+            "gender": row[7],
+            "photo": row[8]
+        }
+        return self.cursor.execute(
+            sql_queries.FILTER_LEFT_JOIN_PROFILE_LIKE_QUERY,
+            (tg_id, tg_id, tg_id,)
+        ).fetchall()
+
+    def sql_insert_like(self, owner, liker):
+        self.cursor.execute(
+            sql_queries.INSERT_LIKE_QUERY,
+            (None, owner, liker,)
+        )
+        self.connection.commit()
+
+    def sql_insert_dislike(self, owner, disliker):
+        self.cursor.execute(
+            sql_queries.INSERT_DISLIKE_QUERY,
+            (None, owner, disliker,)
+        )
+        self.connection.commit()

@@ -1,11 +1,11 @@
 from aiogram import types, Dispatcher
-from config import bot, GROUP_ID
+from config import bot
 from keyboards import inline_buttons
 
 
 async def start_questionnaire_call(call: types.CallbackQuery):
     await bot.send_message(
-        chat_id=GROUP_ID,
+        chat_id=call.message.chat.id,
         text="What's your favorite programming language?",
         reply_markup=await inline_buttons.start_questionnaire_keyboard()
     )
@@ -13,21 +13,21 @@ async def start_questionnaire_call(call: types.CallbackQuery):
 
 async def python_answer(call: types.CallbackQuery):
     await bot.send_message(
-        chat_id=GROUP_ID,
+        chat_id=call.message.chat.id,
         text="Nice choice! Why do you like Python?",
     )
 
 
 async def javascript_answer(call: types.CallbackQuery):
     await bot.send_message(
-        chat_id=GROUP_ID,
+        chat_id=call.message.chat.id,
         text="Interesting! What projects have you worked on with JavaScript?",
     )
 
 
 async def cpp_answer(call: types.CallbackQuery):
     await bot.send_message(
-        chat_id=GROUP_ID,
+        chat_id=call.message.chat.id,
         text="Great! How long have you been programming in C++?",
     )
 
