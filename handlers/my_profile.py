@@ -70,7 +70,7 @@ async def random_profile_call(call: types.CallbackQuery):
     else:
         await bot.send_message(
             chat_id=call.from_user.id,
-            text='There is no profiles that you have not liked and disliked'
+            text='There are no more profiles'
         )
 
 
@@ -99,7 +99,7 @@ async def like_detect_call(call: types.CallbackQuery):
 
 async def dislike_detect_call(call: types.CallbackQuery):
     db = Database()
-    owner = re.sub("dislike_", "", call.data)
+    owner = re.sub("disliker", "", call.data)
     print(call.data)
     print(owner)
     try:
@@ -131,7 +131,7 @@ def register_profile_handler(dp: Dispatcher):
     )
     dp.register_callback_query_handler(
         dislike_detect_call,
-        lambda call: "dislike_" in call.data
+        lambda call: "disliker" in call.data
     )
     dp.register_callback_query_handler(
         like_detect_call,

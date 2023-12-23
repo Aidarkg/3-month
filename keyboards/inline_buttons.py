@@ -59,7 +59,7 @@ async def like_dislike_keyboard(owner_tg_id):
     )
     dislike_button = InlineKeyboardButton(
         "DISLIKE 👎🏻",
-        callback_data=f"dislike_{owner_tg_id}"
+        callback_data=f"disliker{owner_tg_id}"
     )
     markup.add(like_button)
     markup.add(dislike_button)
