@@ -55,7 +55,7 @@ async def like_dislike_keyboard(owner_tg_id):
     markup = InlineKeyboardMarkup()
     like_button = InlineKeyboardButton(
         "LIKE 👍🏻",
-        callback_data=f"like_{owner_tg_id}"
+        callback_data=f"liker{owner_tg_id}"
     )
     dislike_button = InlineKeyboardButton(
         "DISLIKE 👎🏻",
