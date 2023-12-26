@@ -16,12 +16,19 @@ class Database:
         self.connection.execute(sql_queries.CREATE_PROFILE_TABLE)
         self.connection.execute(sql_queries.CREATE_LIKE_TABLE_QUERY)
         self.connection.execute(sql_queries.CREATE_DISLIKE_TABLE_QUERY)
+        self.connection.execute(sql_queries.create_table_reference_users)
+
+        try:
+            self.connection.execute(sql_queries.add_column_table_telegram_users)
+        except sqlite3.Error:
+            pass
+
         self.connection.commit()
 
     def sql_insert_user(self, tg_id, username, first_name, last_name):
         self.cursor.execute(
             sql_queries.INSERT_USER_QUERY,
-            (None, tg_id, username, first_name, last_name)
+            (None, tg_id, username, first_name, last_name, None)
         )
         self.connection.commit()
 
@@ -116,3 +123,33 @@ class Database:
             (None, owner, disliker,)
         )
         self.connection.commit()
+
+    def get_referral_link(self, user_id):
+        self.cursor.execute(sql_queries.select_reference_user,
+                            (user_id,)
+                            )
+        result = self.cursor.fetchone()
+        return result[0] if result else None
+
+    def get_referral_list(self, user_id):
+        self.cursor.execute(
+            """
+            SELECT owner_telegram_id
+            FROM reference_users
+            WHERE reference_telegram_id = ?
+            """,
+            (user_id,)
+        )
+        referred_users = self.cursor.fetchall()
+        if referred_users:
+            referred_users_ids = [user[0] for user in referred_users]
+            query = f"""
+            SELECT telegram_id, username
+            FROM telegram_users
+            WHERE telegram_id IN ({','.join('?' * len(referred_users_ids))})
+            """
+            self.cursor.execute(query, referred_users_ids)
+            referred_users_data = self.cursor.fetchall()
+            return referred_users_data
+        else:
+            return []

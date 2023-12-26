@@ -10,6 +10,20 @@ UNIQUE (TELEGRAM_ID)
 )
 """
 
+add_column_table_telegram_users = """
+alter table telegram_users add column REFERENCE_LINK text
+"""
+
+create_table_reference_users = """
+create table if not exists reference_users
+(
+id integer primary key,
+owner_telegram_id integer,
+reference_telegram_id integer,
+unique (owner_telegram_id, reference_telegram_id)
+)
+"""
+
 CREATE_PROFILE_TABLE = """
 create table if not exists profile_users
 (
@@ -57,7 +71,7 @@ UNIQUE (OWNER_TELEGRAM_ID, DISLIKER_TELEGRAM_ID)
 """
 
 INSERT_USER_QUERY = """
-INSERT OR IGNORE INTO telegram_users VALUES (?,?,?,?,?)
+INSERT OR IGNORE INTO telegram_users VALUES (?,?,?,?,?,?)
 """
 
 FILTER_LEFT_JOIN_PROFILE_LIKE_QUERY = """
@@ -103,3 +117,9 @@ update ban_users set ban_count = ban_count + 1 where telegram_id = ?
 DELETE_BAN_USER = """
 delete from ban_users where telegram_id = ?
 """
+
+select_reference_user = """
+            SELECT REFERENCE_LINK
+            FROM telegram_users
+            WHERE telegram_id = ?
+            """

@@ -54,7 +54,7 @@ async def random_profile_call(call: types.CallbackQuery):
         random_profile = random.choice(profiles)
         with open(random_profile['photo'], 'rb') as photo:
             await bot.send_photo(
-                chat_id=call.from_user.id,
+                chat_id=call.message.chat.id,
                 photo=photo,
                 caption=PROFILE_TEXT.format(
                     nickname=random_profile['nickname'],
@@ -69,7 +69,7 @@ async def random_profile_call(call: types.CallbackQuery):
             )
     else:
         await bot.send_message(
-            chat_id=call.from_user.id,
+            chat_id=call.message.chat.id,
             text='There are no more profiles'
         )
 
@@ -90,7 +90,7 @@ async def like_detect_call(call: types.CallbackQuery):
         )
     except sqlite3.IntegrityError:
         await bot.send_message(
-            chat_id=call.from_user.id,
+            chat_id=call.message.chat.id,
             text='You liked this profile before'
         )
     finally:
@@ -113,7 +113,7 @@ async def dislike_detect_call(call: types.CallbackQuery):
         )
     except sqlite3.IntegrityError:
         await bot.send_message(
-            chat_id=call.from_user.id,
+            chat_id=call.message.chat.id,
             text='You disliked this profile before'
         )
     finally:

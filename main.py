@@ -6,7 +6,8 @@ from handlers import (
     chat_actions,
     ban_users,
     registration,
-    my_profile
+    my_profile,
+    reference
 )
 from database import sql_commands
 
@@ -21,6 +22,7 @@ questionnaire.register_questionnaire_handlers(dp=dp)
 ban_users.register_ban_users_handlers(dp=dp)
 my_profile.register_profile_handler(dp=dp)
 registration.register_registration_handlers(dp=dp)
+reference.register_reference_users(dp=dp)
 chat_actions.register_chat_actions_handlers(dp=dp)
 
 if __name__ == "__main__":
