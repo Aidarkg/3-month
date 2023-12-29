@@ -123,3 +123,31 @@ select_reference_user = """
             FROM telegram_users
             WHERE telegram_id = ?
             """
+
+select_referral_list = """
+            SELECT reference_telegram_id
+            FROM reference_users
+            WHERE owner_telegram_id = ?
+            """
+
+select_join_telegram_users_telegram_id = f"""
+            SELECT TELEGRAM_ID, FIRST_NAME
+            FROM telegram_users
+            WHERE TELEGRAM_ID IN 
+            """
+
+INSERT_REFERRAL_QUERY = """
+            INSERT INTO reference_users VALUES (?,?,?)
+            """
+
+SELECT_USER_BY_LINK_QUERY = """
+            SELECT * FROM telegram_users WHERE REFERENCE_LINK = ?
+            """
+
+UPDATE_USER_LINK_QUERY = """
+            UPDATE telegram_users SET REFERENCE_LINK = ? WHERE TELEGRAM_ID = ?
+            """
+
+SELECT_USER_QUERY = """
+            SELECT * FROM telegram_users WHERE TELEGRAM_ID = ?
+            """

@@ -133,23 +133,58 @@ class Database:
 
     def get_referral_list(self, user_id):
         self.cursor.execute(
-            """
-            SELECT owner_telegram_id
-            FROM reference_users
-            WHERE reference_telegram_id = ?
-            """,
+            sql_queries.select_referral_list,
             (user_id,)
         )
         referred_users = self.cursor.fetchall()
-        if referred_users:
-            referred_users_ids = [user[0] for user in referred_users]
-            query = f"""
-            SELECT telegram_id, username
-            FROM telegram_users
-            WHERE telegram_id IN ({','.join('?' * len(referred_users_ids))})
-            """
+        referred_users_ids = [user[0] for user in referred_users]
+        if referred_users_ids:
+            query = f"{sql_queries.select_join_telegram_users_telegram_id}({','.join('?' * len(referred_users_ids))})"
+
             self.cursor.execute(query, referred_users_ids)
             referred_users_data = self.cursor.fetchall()
             return referred_users_data
         else:
             return []
+
+    def sql_insert_referral(self, owner, referral):
+        self.cursor.execute(
+            sql_queries.INSERT_REFERRAL_QUERY,
+            (None, owner, referral,)
+        )
+        self.connection.commit()
+
+    def sql_select_user_by_link(self, link):
+        self.cursor.row_factory = lambda cursor, row: {
+            "id": row[0],
+            "telegram_id": row[1],
+            "username": row[2],
+            "first_name": row[3],
+            "last_name": row[4],
+            "link": row[5],
+        }
+        return self.cursor.execute(
+            sql_queries.SELECT_USER_BY_LINK_QUERY,
+            (link,)
+        ).fetchone()
+
+    def sql_update_user_link(self, link, tg_id):
+        self.cursor.execute(
+            sql_queries.UPDATE_USER_LINK_QUERY,
+            (link, tg_id,)
+        )
+        self.connection.commit()
+
+    def sql_select_user(self, tg_id):
+        self.cursor.row_factory = lambda cursor, row: {
+            "id": row[0],
+            "telegram_id": row[1],
+            "username": row[2],
+            "first_name": row[3],
+            "last_name": row[4],
+            "link": row[5],
+        }
+        return self.cursor.execute(
+            sql_queries.SELECT_USER_QUERY,
+            (tg_id,)
+        ).fetchone()

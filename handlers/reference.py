@@ -1,10 +1,10 @@
 from aiogram import types, Dispatcher
-from config import bot, MEDIA
-from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.dispatcher import FSMContext
-from keyboards.inline_buttons import start_menu_keyboard, referral_program_keyboard
-from const import PROFILE_TEXT
+from config import bot
+from keyboards.inline_buttons import referral_program_keyboard
 from database.sql_commands import Database
+import os
+import binascii
+from aiogram.utils.deep_linking import _create_link
 
 
 async def callback_referral_program(call: types.CallbackQuery):
@@ -17,26 +17,38 @@ async def callback_referral_program(call: types.CallbackQuery):
 
 async def callback_referral_link(call: types.CallbackQuery):
     db = Database()
-    referral_link = db.get_referral_link(user_id=call.from_user.id)
-    if referral_link:
+    user = db.sql_select_user(
+        tg_id=call.from_user.id
+    )
+    print(user)
+
+    if not user['link']:
+        token = binascii.hexlify(os.urandom(8)).decode()
+        link = await _create_link(link_type="start", payload=token)
+        db.sql_update_user_link(
+            link=link,
+            tg_id=call.from_user.id,
+        )
         await bot.send_message(
             chat_id=call.message.chat.id,
-            text=f"Your referral link: {referral_link}"
+            text=f"Your referral link: {link}"
         )
     else:
         await bot.send_message(
             chat_id=call.message.chat.id,
-            text="You don't have a referral link yet."
+            text=f"Your referral link: {user['link']}"
         )
 
 
 async def callback_referral_list(call: types.CallbackQuery):
     db = Database()
-    referral_list = db.get_referral_list(user_id=call.from_user.id)
+    referral_list = db.get_referral_list(
+        user_id=call.from_user.id
+    )
     if referral_list:
         message = "Your referral list:\n"
         for user in referral_list:
-            message += f"- {user['username']} ({user['telegram_id']})\n"
+            message += f"- {user[1]} ({user[0]})\n"
     else:
         message = "You don't have any referrals yet."
 
