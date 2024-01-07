@@ -30,7 +30,7 @@ async def start_button(message: types.Message):
         )
 
     command = message.get_full_command()
-    print(command)
+    # print(command)
     if command[1] != "":
         link = await _create_link(link_type="start", payload=command[1])
         owner = db.sql_select_user_by_link(
