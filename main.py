@@ -8,7 +8,7 @@ from handlers import (
     registration,
     my_profile,
     reference,
-    scraper,
+    # scraper,
     youtube_download
 )
 from database import sql_commands
@@ -25,7 +25,7 @@ ban_users.register_ban_users_handlers(dp=dp)
 my_profile.register_profile_handler(dp=dp)
 registration.register_registration_handlers(dp=dp)
 reference.register_reference_users(dp=dp)
-scraper.register_scraper_handler(dp=dp)
+# scraper.register_scraper_handler(dp=dp)
 youtube_download.register_audio_handler(dp=dp)
 chat_actions.register_chat_actions_handlers(dp=dp)
 
