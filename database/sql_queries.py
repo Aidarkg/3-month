@@ -151,3 +151,24 @@ UPDATE_USER_LINK_QUERY = """
 SELECT_USER_QUERY = """
             SELECT * FROM telegram_users WHERE TELEGRAM_ID = ?
             """
+
+CREATE_TABLE_MUSIC = """
+            create table if not exists music (
+                id integer primary key,
+                name_music text,
+                user_name char(50),
+                telegram_id integer,
+                unique(id, telegram_id)
+            )
+"""
+
+INSERT_USER_MUSIC = """
+            insert into music values (?,?,?,?)
+"""
+
+CREATE_TABLE_AUDIO_REQUESTS = """
+            CREATE TABLE IF NOT EXISTS audio_requests (
+                user_id INTEGER PRIMARY KEY,
+                requested INTEGER DEFAULT 0
+            )
+"""

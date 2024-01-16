@@ -27,10 +27,10 @@ async def start_menu_keyboard():
         "Referral Program 🔄",
         callback_data="referral_program"
     )
-    # scraper_button = InlineKeyboardButton(
-    #     "Anime Link ☯☯",
-    #     callback_data="scraper_button"
-    # )
+    scraper_button = InlineKeyboardButton(
+        "Anime Link ☯☯",
+        callback_data="scraper_button"
+    )
     download_audio = InlineKeyboardButton(
         "Youtube MP3 🎧",
         callback_data="audio_download_button"
@@ -41,7 +41,7 @@ async def start_menu_keyboard():
     markup.add(my_profile_button)
     markup.add(view_profile_button)
     markup.add(referral_program_button)
-    # markup.add(scraper_button)
+    markup.add(scraper_button)
     markup.add(download_audio)
     return markup
 

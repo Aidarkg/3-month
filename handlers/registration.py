@@ -2,7 +2,6 @@ from aiogram import types, Dispatcher
 from config import bot, MEDIA
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
-from keyboards.inline_buttons import start_menu_keyboard
 from const import PROFILE_TEXT
 from database.sql_commands import Database
 

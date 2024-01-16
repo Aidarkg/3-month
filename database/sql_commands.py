@@ -17,6 +17,8 @@ class Database:
         self.connection.execute(sql_queries.CREATE_LIKE_TABLE_QUERY)
         self.connection.execute(sql_queries.CREATE_DISLIKE_TABLE_QUERY)
         self.connection.execute(sql_queries.create_table_reference_users)
+        self.connection.execute(sql_queries.CREATE_TABLE_MUSIC)
+        self.connection.execute(sql_queries.CREATE_TABLE_AUDIO_REQUESTS)
 
         try:
             self.connection.execute(sql_queries.add_column_table_telegram_users)
@@ -188,3 +190,30 @@ class Database:
             sql_queries.SELECT_USER_QUERY,
             (tg_id,)
         ).fetchone()
+
+    def insert_table_music(self, music_name, user_name, tg_id):
+        self.cursor.execute(
+            sql_queries.INSERT_USER_MUSIC,
+            (None, music_name, user_name, tg_id))
+        self.connection.commit()
+
+    def save_audio_request(self, user_id):
+        self.cursor.execute('''
+            INSERT INTO audio_requests (user_id, requested)
+            VALUES (?, 1)
+            ON CONFLICT(user_id) DO UPDATE SET requested = 1
+        ''', (user_id,))
+        self.connection.commit()
+
+    def has_audio_request(self, user_id):
+        self.cursor.execute('''
+            SELECT requested FROM audio_requests WHERE user_id = ?
+        ''', (user_id,))
+        result = self.cursor.fetchone()
+        return result and result[0] == 1
+
+    def remove_audio_request(self, user_id):
+        self.cursor.execute('''
+            UPDATE audio_requests SET requested = 0 WHERE user_id = ?
+        ''', (user_id,))
+        self.connection.commit()
